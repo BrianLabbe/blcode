@@ -2,6 +2,4 @@
 
 var Generator = require("./lib");
 
-module.exports = {
-	Generator: Generator
-};
+module.exports = Generator;
