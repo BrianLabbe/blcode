@@ -44,7 +44,7 @@ Element
  /	LeafOpenCloseTagElement
 
 OpenCloseTagElement "Open Close Element"
- =	"[" openName:OpenCloseTagName attributes:AttributeList "]"  ("\n" / "") elements:Element* "[/" closeName:OpenCloseTagName "]" ("\n" / "") { 
+ =	"[" openName:OpenCloseTagName attributes:AttributeList "]"  ("\n" / "") elements:Element* "[/" closeName:OpenCloseTagName "]" { 
  		if (openName != closeName) {
  			throw new Error("Expecting [/" + openName + "] but got [/" + closeName + "]");
  		}
@@ -58,7 +58,7 @@ StandaloneTagElement "Standalone Element"
  	}
 
 LeafOpenCloseTagElement "Leaf Open Close Element"
- =	"[" openName:LeafOpenCloseTagName attributes:AttributeList "]" ("\n" / "") characters:TextCharacter* "[/" closeName:LeafOpenCloseTagName "]" ("\n" / "") { 
+ =	"[" openName:LeafOpenCloseTagName attributes:AttributeList "]" ("\n" / "") characters:TextCharacter* "[/" closeName:LeafOpenCloseTagName "]" { 
  		if (openName != closeName) {
  			throw new Error("Expecting [/" + openName + "] but got [/" + closeName + "]");
  		}
