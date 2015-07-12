@@ -23,7 +23,7 @@ SpecialCharacter
 WhitespaceCharacter
  =	" "
  /	"\t"
- /	"\n" { return "<br />"}
+ /	"\n" { return "<br>"}
  /	"\r" { return ""}
 
 AttributeValueCharacter
