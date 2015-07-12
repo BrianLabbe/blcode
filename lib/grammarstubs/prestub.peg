@@ -1,0 +1,79 @@
+{
+	var TagType = {
+		OpenTag : "openTag",
+		CloseTag : "closeTag"
+	}
+
+	var Tag = function(name, type, attributes) {
+		this.name = name;
+		this.type = type;
+		this.attributes = attributes;
+	}
+
+	var Attribute = function(name, value) {
+		this.name = name;
+		this.value = value;
+	}
+
+	function makeOpenCloseTagElement(name, attributes, elements) {
+		result = [];
+		result = result.concat(new Tag(name, TagType.OpenTag, attributes));
+		result = result.concat.apply(result, elements);
+		result = result.concat(new Tag(name, TagType.CloseTag, []));
+
+		return result;
+	}
+
+	function makeLeafOpenCloseTagElement(name, attributes, value) {
+		var leafTag = new Tag(name, TagType.OpenTag, attributes);
+		leafTag.value = value;
+		result = [];
+		result = result.concat(leafTag);
+
+		return result;
+	}
+}
+
+Document
+ =	elements:Element* {return [].concat.apply([], elements);}
+
+Element
+ =	OpenCloseTagElement
+ /	StandaloneTagElement
+ /	TextElement
+ /	LeafOpenCloseTagElement
+
+OpenCloseTagElement "Open Close Element"
+ =	"[" openName:OpenCloseTagName attributes:AttributeList "]" elements:Element* "[/" closeName:OpenCloseTagName "]" { 
+ 		if (openName != closeName) {
+ 			throw new Error("Expecting [/" + openName + "] but got [/" + closeName + "]");
+ 		}
+
+ 		return makeOpenCloseTagElement(openName, attributes, elements);
+ 	}
+
+StandaloneTagElement "Standalone Element"
+ =	"[" name:StandaloneTagName attributes:AttributeList "]" {
+ 		return [new Tag(name, TagType.OpenTag, attributes)];
+ 	}
+
+LeafOpenCloseTagElement "Leaf Open Close Element"
+ =	"[" openName:LeafOpenCloseTagName attributes:AttributeList "]" characters:TextCharacter* "[/" closeName:LeafOpenCloseTagName "]" { 
+ 		if (openName != closeName) {
+ 			throw new Error("Expecting [/" + openName + "] but got [/" + closeName + "]");
+ 		}
+
+ 		return makeLeafOpenCloseTagElement(openName, attributes, characters.join(""));
+ 	}
+
+TextElement
+ =	characters:TextCharacter+ {return [characters.join("")]}
+
+AttributeList
+ =	attributes:Attribute*
+
+Attribute
+ =	" "* name:AttributeName " "* "=" " "* "\"" value:AttributeValue "\"" " "* {
+ 		return new Attribute(name, value);
+ 	}
+ 

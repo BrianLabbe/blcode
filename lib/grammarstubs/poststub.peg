@@ -1,0 +1,34 @@
+
+AttributeName
+ =	characters:AttributeNameCharacter+ {return characters.join("")}
+
+AttributeValue
+ =	characters:AttributeValueCharacter+ {return characters.join("")}
+
+TextCharacter "text character"
+ =  char:[\x21-\x3B\x3D\x3F-\x5A\0x5C\x5E-\u10FFFF] 
+ /  EscapedCharacter
+ /	SpecialCharacter
+ /  WhitespaceCharacter
+
+EscapedCharacter 
+ =  "\\[" { return "[" }
+ /  "\\]" { return "]" }
+ /	"\\\\" { return "\\"}
+ 
+SpecialCharacter
+ =	"<" { return "&lt;" }
+ /	">" { return "&gt;" }
+
+WhitespaceCharacter
+ =	" "
+ /	"\t"
+ /	"\n" { return "<br />"}
+ /	"\r" { return ""}
+
+AttributeValueCharacter
+ =	[\x20-\x21\x23-\x5B\x5D-\u10FFFF]
+
+AttributeNameCharacter
+ =	[a-zA-Z0-9]
+ 
